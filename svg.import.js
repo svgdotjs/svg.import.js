@@ -29,55 +29,55 @@ SVG.extend(SVG.Container, {
       /* get node type */
       type = child.nodeName.toLowerCase();
       
-      if (type != '#comment') {
-        /*  objectify attributes */
-        attrs = [].slice.call(child.attributes);
-        for (n = attrs.length - 1; n >= 0; n--)
-          attr[attrs[n].nodeName] = attrs[n].nodeValue;
-
-        /* create elements */
-        switch(type) {
-          case 'rect':
-          case 'circle':
-          case 'ellipse':
-            element = context[type](0,0);
-          break;
-          case 'line':
-            element = context.line(0,0,0,0);
-          break;
-          case 'text':
-          case 'path':
-          case 'polygon':
-          case 'polyline':
-            element = context[type]();
-          break;
-          case 'image':
-            element = context.image(attr['xlink:href']);
-          break;
-          case 'g':
-          case 'svg':
-            if (type == 'svg' && level == 0) {
-              this._convertNodes(child.childNodes, context, level + 1);
-              return context;
-            } else {
-              element = context[type == 'g' ? 'group' : 'nested']();
-              this._convertNodes(child.childNodes, element, level + 1);
-            }
-          break;
-        };
-
-        /* parse attributes */
-        switch(type) {
-          case 'circle':
-            attr.rx = attr.r;
-            attr.ry = attr.r;
-            delete attr.r;
-          break;
-        };
-
-        /* set attributes */
+      /*  objectify attributes */
+      attrs = child.attributes || [];
+      
+      for (n = attrs.length - 1; n >= 0; n--)
+        attr[attrs[n].nodeName] = attrs[n].nodeValue;
+      
+      /* create elements */
+      switch(type) {
+        case 'rect':
+        case 'circle':
+        case 'ellipse':
+          element = context[type](0,0);
+        break;
+        case 'line':
+          element = context.line(0,0,0,0);
+        break;
+        case 'text':
+        case 'path':
+        case 'polygon':
+        case 'polyline':
+          element = context[type]();
+        break;
+        case 'image':
+          element = context.image(attr['xlink:href']);
+        break;
+        case 'g':
+        case 'svg':
+          if (type == 'svg' && level == 0) {
+            this._convertNodes(child.childNodes, context, level + 1);
+            return context;
+          } else {
+            element = context[type == 'g' ? 'group' : 'nested']();
+            this._convertNodes(child.childNodes, element, level + 1);
+          }
+        break;
+      };
+      
+      /* parse attributes */
+      switch(type) {
+        case 'circle':
+          attr.rx = attr.r;
+          attr.ry = attr.r;
+          delete attr.r;
+        break;
+      };
+      
+      /* set attributes */
+      if (element)
         element.attr(attr);
-      }
     };
     
     return context;
