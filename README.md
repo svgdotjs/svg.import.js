@@ -16,6 +16,12 @@ var draw = svg('paper');
 
 draw.import(rawSvg);
 ```
+## Text it yourself
+You can go ahead and test the script yourself here:
+http://svgjs.com/import
+
+Just make sure you export plain SVG from programs like Inkscape or Illustrator.
+
 
 ## Important
 This plugin is still under development and will be improved in the coming months.
