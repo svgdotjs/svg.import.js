@@ -16,7 +16,7 @@ var draw = svg('paper');
 
 draw.import(rawSvg);
 ```
-## Text it yourself
+## Test it yourself
 You can go ahead and test the script yourself here:
 http://svgjs.com/import
 
