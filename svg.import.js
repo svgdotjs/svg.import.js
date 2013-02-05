@@ -1,10 +1,10 @@
-// svg.import.js 0.1 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
-
+// svg.import.js 0.2 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
   import: function(raw) {
     /* create temporary div to receive svg content */
-    var well = document.createElement('div');
+    var well = document.createElement('div')
+      , store = {};
     
     /* properly close svg tags and add them to the DOM */
     well.innerHTML = raw
@@ -12,15 +12,15 @@ SVG.extend(SVG.Container, {
       .replace(/<(\w+)([^<]+?)\/>/g, '<$1$2></$1>');
     
     /* convert nodes to svg elements */
-    this._convertNodes(well.childNodes, this, 0);
+    this._convertNodes(well.childNodes, this, 0, store);
     
     /* mark temporary div for garbage collection */
     well = null;
     
-    return this;
+    return store;
   }
   // Convert nodes to svg.js elements
-, _convertNodes: function(nodes, context, level) {
+, _convertNodes: function(nodes, context, level, store) {
     var i, l, n, key, attrs;
     
     for (i = 0, l = nodes.length; i < l; i++) {
@@ -59,11 +59,11 @@ SVG.extend(SVG.Container, {
         case 'g':
         case 'svg':
           if (type == 'svg' && level == 0) {
-            this._convertNodes(child.childNodes, context, level + 1);
+            this._convertNodes(child.childNodes, context, level + 1, store);
             return context;
           } else {
             element = context[type == 'g' ? 'group' : 'nested']();
-            this._convertNodes(child.childNodes, element, level + 1);
+            this._convertNodes(child.childNodes, element, level + 1, store);
           }
         break;
       };
@@ -78,8 +78,11 @@ SVG.extend(SVG.Container, {
       };
       
       /* set attributes */
-      if (element)
+      if (element) {
         element.attr(attr);
+        if (element.attr('id'))
+          store[element.attr('id')] = element;
+      }
     };
     
     return context;
