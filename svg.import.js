@@ -1,7 +1,7 @@
-// svg.import.js 0.3 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.4 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
-  svg: function(raw) {
+  svg: function(raw, block) {
     /* create temporary div to receive svg content */
     var well = document.createElement('div')
       , store = {}
@@ -12,7 +12,7 @@ SVG.extend(SVG.Container, {
       .replace(/<(\w+)([^<]+?)\/>/g, '<$1$2></$1>')
     
     /* convert nodes to svg elements */
-    this._convertNodes(well.childNodes, this, 0, store)
+    this._convertNodes(well.childNodes, this, 0, store, block)
     
     /* mark temporary div for garbage collection */
     well = null
@@ -20,7 +20,7 @@ SVG.extend(SVG.Container, {
     return store
   }
   // Convert nodes to svg.js elements
-, _convertNodes: function(nodes, context, level, store) {
+, _convertNodes: function(nodes, context, level, store, block) {
     var i, l, n, key, attrs
     
     for (i = 0, l = nodes.length; i < l; i++) {
@@ -59,11 +59,11 @@ SVG.extend(SVG.Container, {
         case 'g':
         case 'svg':
           if (type == 'svg' && level == 0) {
-            this._convertNodes(child.childNodes, context, level + 1, store)
+            this._convertNodes(child.childNodes, context, level + 1, store, block)
             return context
           } else {
             element = context[type == 'g' ? 'group' : 'nested']()
-            this._convertNodes(child.childNodes, element, level + 1, store)
+            this._convertNodes(child.childNodes, element, level + 1, store, block)
           }
         break
       }
@@ -77,11 +77,15 @@ SVG.extend(SVG.Container, {
         break
       }
       
-      /* set attributes */
       if (element) {
+        /* set attributes */
         element.attr(attr)
         if (element.attr('id'))
           store[element.attr('id')] = element
+        
+        /* call block if given */
+        if (typeof block == 'function')
+          block.call(element)
       }
     }
     

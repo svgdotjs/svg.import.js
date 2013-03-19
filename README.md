@@ -30,6 +30,17 @@ var store = draw.svg(rawSvg)
 store.polygon1238.fill('#f06')
 ```
 
+## Block
+If a block is passed as the second argument it will be applied to every element individually. This is particularly useful if you want to mark every element to make referencing easier:
+
+```javascript
+var id = 1
+draw.svg(rawSvg, function() {
+  this.data('import-id', 'element-' + id)
+  id++
+})
+```
+
 
 ## Test it yourself
 You can go ahead and test the script yourself here:
