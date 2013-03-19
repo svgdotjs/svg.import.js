@@ -1,7 +1,7 @@
 // svg.import.js 0.3 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
-  importSVG: function(raw) {
+  svg: function(raw) {
     /* create temporary div to receive svg content */
     var well = document.createElement('div')
       , store = {}

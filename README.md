@@ -14,7 +14,7 @@ var rawSvg = '<?xml version="1.0" encoding="utf-8"?><!-- Generator: Adobe Illust
 
 var draw = SVG('paper')
 
-draw.importSVG(rawSvg)
+draw.svg(rawSvg)
 ```
 
 ## References
@@ -25,7 +25,7 @@ var rawSvg = '<?xml version="1.0" encoding="utf-8"?><!-- Generator: Adobe Illust
 
 var draw = SVG('paper')
 
-var store = draw.importSVG(rawSvg)
+var store = draw.svg(rawSvg)
 
 store.polygon1238.fill('#f06')
 ```
