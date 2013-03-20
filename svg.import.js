@@ -1,4 +1,4 @@
-// svg.import.js 0.4 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.5 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
   svg: function(raw, block) {
@@ -58,13 +58,8 @@ SVG.extend(SVG.Container, {
         break
         case 'g':
         case 'svg':
-          if (type == 'svg' && level == 0) {
-            this._convertNodes(child.childNodes, context, level + 1, store, block)
-            return context
-          } else {
-            element = context[type == 'g' ? 'group' : 'nested']()
-            this._convertNodes(child.childNodes, element, level + 1, store, block)
-          }
+          element = context[type == 'g' ? 'group' : 'nested']()
+          this._convertNodes(child.childNodes, element, level + 1, store, block)
         break
       }
       
