@@ -47,7 +47,14 @@ SVG.extend(SVG.Container, {
         case 'line':
           element = context.line(0,0,0,0)
         break
+        case '#text':
+         context.textNode(child.nodeValue)
+         break
         case 'text':
+        case 'tspan':
+         element = context[type]()
+         this._convertNodes(child.childNodes, element, level + 1, store, block)
+         break;
         case 'path':
         case 'polygon':
         case 'polyline':
