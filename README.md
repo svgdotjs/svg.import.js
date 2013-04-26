@@ -54,6 +54,6 @@ This plugin is still under development and will be improved in the coming months
 Please report issues and suggestions are welcome too.
 
 ## To-do
-- Importing text, defs, gradients and patterns
+- Importing defs, gradients and patterns
 - Parse transform data
 - Parse `data-` attributes
