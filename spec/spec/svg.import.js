@@ -24,13 +24,13 @@ describe('Import', function() {
       var store = draw.svg(rawSVG)
       expect(store.line1234 instanceof SVG.Line).toBe(true)
       expect(store.rect1235 instanceof SVG.Rect).toBe(true)
-      expect(store.path1236.child instanceof SVG.Path).toBe(true)
+      expect(store.path1236 instanceof SVG.Path).toBe(true)
       expect(store.circle1237 instanceof SVG.Ellipse).toBe(true)
-      expect(store.polygon1238.child instanceof SVG.Polygon).toBe(true)
+      expect(store.polygon1238 instanceof SVG.Polygon).toBe(true)
     })
     
     it('should apply a passed block to every element in the structure', function() {
-      var expected = ('line1234 rect1235 path1236 circle1237 polygon1238').split(' ')
+      var expected = ('line1234 rect1235 path1236 circle1237 polygon1238 Layer_1').split(' ')
         , ids = []
         , store = draw.svg(rawSVG, function() { ids.push(this.attr('id')) })
       

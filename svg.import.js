@@ -1,4 +1,4 @@
-// svg.import.js 0.5 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.6 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
   svg: function(raw, block) {
@@ -20,23 +20,26 @@ SVG.extend(SVG.Container, {
     return store
   }
 
+  // Private: convert attributes to an object
 , _objectifyAttributes: function(child) {
-    var attrs, attr = {}
-    attrs = child.attributes || []    
+    var n
+      , attrs = child.attributes || []
+      , attr  = {}
+
     for (n = attrs.length - 1; n >= 0; n--)
       attr[attrs[n].nodeName] = attrs[n].nodeValue
+
     return attr
   }
 
-  // Convert nodes to svg.js elements
+  // Private: convert nodes to svg.js elements
 , _convertNodes: function(nodes, context, level, store, block) {
-    var i, l, n, key
+    var i, l, j, key, element, type, child, attr, clips
     
     for (i = 0, l = nodes.length; i < l; i++) {
-      var element, type
-        , child = nodes[i]
-        , attr  = {}
-        , clips = []
+      child = nodes[i]
+      attr  = {}
+      clips = []
       
       /* get node type */
       type = child.nodeName.toLowerCase()
@@ -57,18 +60,28 @@ SVG.extend(SVG.Container, {
         case 'text':
           if (child.childNodes.length == 0) {
             element = context[type](child.textContent)
-          }
-          else {
+
+          } else {
+            var grandchild
+
             element = null
-            for (var j=0;j<child.childNodes.length;j++) {
-              var grandchild = child.childNodes[j]
+
+            for (j = 0; j < child.childNodes.length; j++) {
+              grandchild = child.childNodes[j]
+
               if (grandchild.nodeName.toLowerCase() == 'tspan') {
-                if (element === null) // first time through call the text() function on the current context
+                if (element === null)
+                  /* first time through call the text() function on the current context */
                   element = context[type](grandchild.textContent)
-                else // for the remaining times create additional tspans
-                  element.tspan(grandchild.textContent).attr(this._objectifyAttributes(grandchild))
+
+                else
+                  /* for the remaining times create additional tspans */
+                  element
+                    .tspan(grandchild.textContent)
+                    .attr(this._objectifyAttributes(grandchild))
               }
             }
+
           }
         break
         case 'path':
@@ -85,11 +98,18 @@ SVG.extend(SVG.Container, {
           this._convertNodes(child.childNodes, element, level + 1, store, block)
         break
         case 'defs':
-          for (var j=0;j<child.childNodes.length;j++) {
-            var grandchild = child.childNodes[j]
-            if (grandchild.nodeName.toLowerCase() == 'clippath') {
-              var clip = (this.defs().put(new SVG.Clip)).attr(this._objectifyAttributes(grandchild))
-              this._convertNodes(grandchild.childNodes, clip, level + 1, store, block)
+          var j, grandchild, node, name
+
+          for (j = 0; j < child.childNodes.length; j++) {
+            grandchild = child.childNodes[j]
+            name = grandchild.nodeName.toLowerCase()
+
+            if (name == 'clippath' || name == 'mask') {
+              node = this.defs()
+                .put(name == 'mask' ? new SVG.Mask : new SVG.Clip)
+                .attr(this._objectifyAttributes(grandchild))
+
+              this._convertNodes(grandchild.childNodes, node, level + 1, store, block)
             }
           }
         break
@@ -97,13 +117,14 @@ SVG.extend(SVG.Container, {
         case '#text':
         case 'metadata':
         case 'desc':
-          // safely ignore these elements
+          /* safely ignore these elements */
         break
         default:
-          console.log("SVG Import got unexpected type " + type, child)
+          console.log('SVG Import got unexpected type ' + type, child)
+        break
       }
       
-      /* parse attributes */
+      /* parse unexpected attributes */
       switch(type) {
         case 'circle':
           attr.rx = attr.r
@@ -115,10 +136,12 @@ SVG.extend(SVG.Container, {
       if (element) {
         /* set attributes */
         element.attr(attr)
+
+        /* store element by id */
         if (element.attr('id'))
           store[element.attr('id')] = element
 
-        // now that we've set the attributes "rebuild" the text to correctly set the attributes 
+        /* now that we've set the attributes "rebuild" the text to correctly set the attributes */
         if (type == 'text')
           element.rebuild()
 
