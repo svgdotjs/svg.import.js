@@ -1,4 +1,4 @@
-// svg.import.js 0.6 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.7 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 SVG.extend(SVG.Container, {
   // Add import method to container elements
   svg: function(raw, block) {
@@ -42,7 +42,7 @@ SVG.extend(SVG.Container, {
       clips = []
       
       /* get node type */
-      type = child.nodeName.toLowerCase()
+      type = child.nodeName
       
       /*  objectify attributes */
       attr = this._objectifyAttributes(child)
@@ -98,20 +98,32 @@ SVG.extend(SVG.Container, {
           this._convertNodes(child.childNodes, element, level + 1, store, block)
         break
         case 'defs':
-          var j, grandchild, node, name
+          //-D  var j, grandchild, node, name
+          //-D  for (j = 0; j < child.childNodes.length; j++) {
+          //-D    grandchild = child.childNodes[j]
+          //-D    name = grandchild.nodeName
+          //-D    if (name == 'clipPath' || name == 'mask') {
+          //-D      node = this.defs()
+          //-D        .put(name == 'mask' ? new SVG.Mask : new SVG.Clip)
+          //-D        .attr(this._objectifyAttributes(grandchild))
+          //-D      this._convertNodes(grandchild.childNodes, node, level + 1, store, block)
+          //-D    }
+          //-D  }
+          this._convertNodes(child.childNodes, context.defs(), level + 1, store, block)
+        break
+        case 'clipPath':
+        case 'mask':
+          element = context[type == 'mask' ? 'mask' : clip]()
+          this._convertNodes(child.childNodes, element, level + 1, store, block)
+        break
+        case 'linearGradient':
+        case 'radialGradient':
+          var self = this
 
-          for (j = 0; j < child.childNodes.length; j++) {
-            grandchild = child.childNodes[j]
-            name = grandchild.nodeName.toLowerCase()
-
-            if (name == 'clippath' || name == 'mask') {
-              node = this.defs()
-                .put(name == 'mask' ? new SVG.Mask : new SVG.Clip)
-                .attr(this._objectifyAttributes(grandchild))
-
-              this._convertNodes(grandchild.childNodes, node, level + 1, store, block)
-            }
-          }
+          element = context.defs().gradient(type.split('Gradient')[0], function(stop) {
+            for (var j = 0; j < child.childNodes.length; j++)
+              stop.at(self._objectifyAttributes(child.childNodes[j]))
+          })
         break
         case '#comment':
         case '#text':
