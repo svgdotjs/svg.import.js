@@ -150,6 +150,19 @@ SVG.extend(SVG.Container, {
       }
       
       if (element) {
+
+        /* convert any child <desc> tags to a .description attribute instead */ 
+        for (var j=0;j<child.childNodes.length;j++) {
+          var grandchild = child.childNodes[j]
+          if (grandchild.nodeName.toLowerCase() == 'desc') {
+            if (!attr.description) 
+              attr.description = ''
+            else
+              attr.description += '|'
+            attr.description += grandchild.textContent
+          }
+        }
+
         /* set attributes */
         element.attr(attr)
 
