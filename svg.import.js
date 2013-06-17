@@ -121,8 +121,12 @@ SVG.extend(SVG.Container, {
           var self = this
 
           element = context.defs().gradient(type.split('Gradient')[0], function(stop) {
-            for (var j = 0; j < child.childNodes.length; j++)
-              stop.at(self._objectifyAttributes(child.childNodes[j]))
+            for (var j = 0; j < child.childNodes.length; j++) {
+              console.log(child)
+              stop
+                .at(self._objectifyAttributes(child.childNodes[j]))
+                .style(child.childNodes[j].getAttribute('style'))
+            }
           })
         break
         case '#comment':
