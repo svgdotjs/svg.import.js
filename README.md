@@ -41,7 +41,6 @@ draw.svg(rawSvg, function() {
 })
 ```
 
-
 ## Test it yourself
 You can go ahead and test the script yourself here:
 http://svgjs.com/import
