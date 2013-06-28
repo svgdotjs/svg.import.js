@@ -37,6 +37,18 @@ describe('Import', function() {
       expect(ids).toEqual(expected)
     })
 
+    it('accepts individual svg nodes', function() {
+      var store = draw.svg(rawSingle)
+
+      expect(store.polygon1238 instanceof SVG.Polygon).toBe(true)
+    })
+
+    it('accepts individual svg nodes with closing tag', function() {
+      var store = draw.svg(rawSingleClosing)
+
+      expect(store.rect1235 instanceof SVG.Rect).toBe(true)
+    })
+
     describe('parses transformation', function() {
       var store, poly
 

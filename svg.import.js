@@ -1,4 +1,4 @@
-// svg.import.js 0.8 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.9 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 (function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -12,7 +12,7 @@
       clips = []
       
       /* get node type */
-      type = child.nodeName
+      type = child.nodeName.toLowerCase()
       
       /*  objectify attributes */
       attr = objectifyAttributes(child)
@@ -70,14 +70,14 @@
         case 'defs':
           convertNodes(child.childNodes, context.defs(), level + 1, store, block)
         break
-        case 'clipPath':
+        case 'clippath':
         case 'mask':
-          element = context[type == 'mask' ? 'mask' : clip]()
+          element = context[type == 'mask' ? 'mask' : 'clip']()
           convertNodes(child.childNodes, element, level + 1, store, block)
         break
-        case 'linearGradient':
-        case 'radialGradient':
-          element = context.defs().gradient(type.split('Gradient')[0], function(stop) {
+        case 'lineargradient':
+        case 'radialgradient':
+          element = context.defs().gradient(type.split('gradient')[0], function(stop) {
             for (var j = 0; j < child.childNodes.length; j++) {
               stop
                 .at(objectifyAttributes(child.childNodes[j]))
