@@ -30,7 +30,7 @@ describe('Import', function() {
     })
     
     it('applies a passed block to every element in the structure', function() {
-      var expected = ('line1234 rect1235 path1236 circle1237 polygon1238 Layer_1').split(' ')
+      var expected = ('line1234 rect1235 path1236 circle1237 polygon1238 use1239 Layer_1').split(' ')
         , ids = []
         , store = draw.svg(rawSVG, function() { ids.push(this.attr('id')) })
       
@@ -47,6 +47,13 @@ describe('Import', function() {
       var store = draw.svg(rawSingleClosing)
 
       expect(store.rect1235 instanceof SVG.Rect).toBe(true)
+    })
+
+    it('imports the use element correctly', function() {
+      var store = draw.svg(rawSVG)
+      
+      expect(store.use1239 instanceof SVG.Use).toBe(true)
+      expect(store.use1239.attr('xlink:href')).toBe('#' + store.polygon1238)
     })
 
     describe('parses transformation', function() {

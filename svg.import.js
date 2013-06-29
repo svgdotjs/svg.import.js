@@ -1,4 +1,4 @@
-// svg.import.js 0.9 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.10 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 (function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -69,6 +69,9 @@
         break
         case 'defs':
           convertNodes(child.childNodes, context.defs(), level + 1, store, block)
+        break
+        case 'use':
+          element = context.use()
         break
         case 'clippath':
         case 'mask':
