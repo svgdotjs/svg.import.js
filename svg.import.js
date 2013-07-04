@@ -1,4 +1,4 @@
-// svg.import.js 0.10 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.11 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 ;(function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -159,7 +159,7 @@
     for (i = list.length - 1; i >= 0; i--) {
       /* parse transformation */
       t = list[i].match(/([A-Za-z]+)\(([^\)]+)\)/)
-      v = (t[2] || '').replace(/\s+/g, '').split(',')
+      v = (t[2] || '').replace(/^\s+/,'').replace(/,/g, ' ').replace(/\s+/g, ' ').split(' ')
 
       /* objectify transformation */
       switch(t[1]) {

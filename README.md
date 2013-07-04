@@ -54,5 +54,4 @@ Please report issues and suggestions are welcome too.
 
 ## To-do
 - Importing text, defs and patterns properly
-- Parse transform data
 - Parse `data-` attributes
