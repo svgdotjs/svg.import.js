@@ -82,9 +82,13 @@
         case 'radialgradient':
           element = context.defs().gradient(type.split('gradient')[0], function(stop) {
             for (var j = 0; j < child.childNodes.length; j++) {
-              stop
-                .at(objectifyAttributes(child.childNodes[j]))
-                .style(child.childNodes[j].getAttribute('style'))
+                if (child.childNodes[j].nodeType === '1') {
+                
+                  stop
+                    .at(objectifyAttributes(child.childNodes[j]))
+                    .style(child.childNodes[j].getAttribute('style'))
+                    
+                }
             }
           })
         break
