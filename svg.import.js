@@ -1,4 +1,4 @@
-// svg.import.js 0.11 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.13 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 ;(function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -28,7 +28,7 @@
           element = context.line(0,0,0,0)
         break
         case 'text':
-          if (child.childNodes.length == 0) {
+          if (child.childNodes.length < 2) {
             element = context[type](child.textContent)
   
           } else {
@@ -83,7 +83,8 @@
           element = context.defs().gradient(type.split('gradient')[0], function(stop) {
             for (var j = 0; j < child.childNodes.length; j++) {
               stop
-                .at(objectifyAttributes(child.childNodes[j]))
+                .at({ offset: 0 })
+                .attr(objectifyAttributes(child.childNodes[j]))
                 .style(child.childNodes[j].getAttribute('style'))
             }
           })
@@ -141,9 +142,13 @@
       , attrs = child.attributes || []
       , attr  = {}
     
-    /* gether attributes */
+    /* gather attributes */
     for (i = attrs.length - 1; i >= 0; i--)
       attr[attrs[i].nodeName] = attrs[i].nodeValue
+
+    /* ensure stroke width where needed */
+    if (typeof attr.stroke != 'undefined' && typeof attr['stroke-width'] == 'undefined')
+      attr['stroke-width'] = 1
   
     return attr
   }
