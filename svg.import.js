@@ -1,4 +1,4 @@
-// svg.import.js 0.13 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.14 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 ;(function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -169,10 +169,10 @@
       /* objectify transformation */
       switch(t[1]) {
         case 'matrix':
-          trans.a         = parseFloat(v[0]) || def.a
+          trans.a         = SVG.regex.isNumber.test(v[0]) ? parseFloat(v[0]) : def.a
           trans.b         = parseFloat(v[1]) || def.b
           trans.c         = parseFloat(v[2]) || def.c
-          trans.d         = parseFloat(v[3]) || def.d
+          trans.d         = SVG.regex.isNumber.test(v[3]) ? parseFloat(v[3]) : def.d
           trans.e         = parseFloat(v[4]) || def.e
           trans.f         = parseFloat(v[5]) || def.f
         break
@@ -182,8 +182,8 @@
           trans.cy        = parseFloat(v[2]) || def.cy
         break
         case 'scale':
-          trans.scaleX    = parseFloat(v[0]) || def.scaleX
-          trans.scaleY    = parseFloat(v[1]) || def.scaleY
+          trans.scaleX    = SVG.regex.isNumber.test(v[0]) ? parseFloat(v[0]) : def.scaleX
+          trans.scaleY    = SVG.regex.isNumber.test(v[1]) ? parseFloat(v[1]) : def.scaleY
         break
         case 'skewX':
           trans.skewX     = parseFloat(v[0]) || def.skewX
