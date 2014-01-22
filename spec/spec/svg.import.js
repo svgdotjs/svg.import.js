@@ -6,27 +6,27 @@ describe('Import', function() {
   
   describe('svg()', function() {
     
-    it('stores imported element in an object', function() {
+    it('stores imported element in an instance of SVG.ImportStore', function() {
       var store = draw.svg(rawSVG)
-      expect(typeof store).toBe('object')
+      expect(store instanceof SVG.ImportStore).toBe(true)
     })
     
     it('makes imported elements accessible in store with their ID', function() {
       var store = draw.svg(rawSVG)
-      expect(!!store.line1234).toBe(true)
-      expect(!!store.rect1235).toBe(true)
-      expect(!!store.path1236).toBe(true)
-      expect(!!store.circle1237).toBe(true)
-      expect(!!store.polygon1238).toBe(true)
+      expect(!!store.get('line1234')).toBe(true)
+      expect(!!store.get('rect1235')).toBe(true)
+      expect(!!store.get('path1236')).toBe(true)
+      expect(!!store.get('circle1237')).toBe(true)
+      expect(!!store.get('polygon1238')).toBe(true)
     })
     
     it('typecasts imported elements correctly', function() {
       var store = draw.svg(rawSVG)
-      expect(store.line1234 instanceof SVG.Line).toBe(true)
-      expect(store.rect1235 instanceof SVG.Rect).toBe(true)
-      expect(store.path1236 instanceof SVG.Path).toBe(true)
-      expect(store.circle1237 instanceof SVG.Ellipse).toBe(true)
-      expect(store.polygon1238 instanceof SVG.Polygon).toBe(true)
+      expect(store.get('line1234') instanceof SVG.Line).toBe(true)
+      expect(store.get('rect1235') instanceof SVG.Rect).toBe(true)
+      expect(store.get('path1236') instanceof SVG.Path).toBe(true)
+      expect(store.get('circle1237') instanceof SVG.Ellipse).toBe(true)
+      expect(store.get('polygon1238') instanceof SVG.Polygon).toBe(true)
     })
     
     it('applies a passed block to every element in the structure', function() {
@@ -40,20 +40,20 @@ describe('Import', function() {
     it('accepts individual svg nodes', function() {
       var store = draw.svg(rawSingle)
 
-      expect(store.polygon1238 instanceof SVG.Polygon).toBe(true)
+      expect(store.get('polygon1238') instanceof SVG.Polygon).toBe(true)
     })
 
     it('accepts individual svg nodes with closing tag', function() {
       var store = draw.svg(rawSingleClosing)
 
-      expect(store.rect1235 instanceof SVG.Rect).toBe(true)
+      expect(store.get('rect1235') instanceof SVG.Rect).toBe(true)
     })
 
     it('imports the use element correctly', function() {
       var store = draw.svg(rawSVG)
       
-      expect(store.use1239 instanceof SVG.Use).toBe(true)
-      expect(store.use1239.attr('xlink:href')).toBe('#' + store.polygon1238)
+      expect(store.get('use1239') instanceof SVG.Use).toBe(true)
+      expect(store.get('use1239').attr('xlink:href')).toBe('#' + store.polygon1238)
     })
 
     describe('parses transformation', function() {
@@ -67,7 +67,7 @@ describe('Import', function() {
       it('attribute', function() {
         var circle = SVG.get('circle1237')
 
-        expect(circle.attr('transform')).toBe('rotate(45,80,120)')
+        expect(circle.attr('transform')).toBe('rotate(45 80 120)')
         expect(circle.transform('rotation')).toBe(45)
       })
       it('rotate and rotation point', function() {
@@ -102,7 +102,6 @@ describe('Import', function() {
   })
   
 })
-
 
 
 

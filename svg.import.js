@@ -1,4 +1,4 @@
-// svg.import.js 0.14 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.import.js 0.16 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
   var convertNodes, objectifyAttributes, objectifyTransformations
 
@@ -55,9 +55,11 @@
           }
         break
         case 'path':
+          element = context.path(attr['d'], true)
+        break
         case 'polygon':
         case 'polyline':
-          element = context[type]()
+          element = context[type](attr['points'])
         break
         case 'image':
           element = context.image(attr['xlink:href'])
@@ -121,8 +123,8 @@
   
         /* store element by id */
         if (element.attr('id'))
-          store[element.attr('id')] = element
-  
+          store.add(element.attr('id'), element, level == 0)
+
         /* now that we've set the attributes "rebuild" the text to correctly set the attributes */
         if (type == 'text')
           element.rebuild()
@@ -206,7 +208,7 @@
     svg: function(raw, block) {
       /* create temporary div to receive svg content */
       var well = document.createElement('div')
-        , store = {}
+        , store = new SVG.ImportStore
       
       /* properly close svg tags and add them to the DOM */
       well.innerHTML = raw
@@ -224,4 +226,54 @@
     
   })
 
-}).call(this)
+  SVG.ImportStore = function() {
+    this._importStoreRoots = new SVG.Set
+    this._importStore = {}
+  }
+
+  SVG.extend(SVG.ImportStore, {
+    add: function(key, element, root) {
+      /* DEPRECATED old method of storing elements in the store object */
+      this[key] = element
+
+      /* store element in local store object */
+      if (key) {
+        if (this._importStore[key]) {
+          var oldKey = key
+          key += Math.round(Math.random() * 1e16)
+          console.warn('Encountered duplicate id "' + oldKey + '". Changed store key to "' + key + '".')
+        }
+
+        this._importStore[key] = element
+      }
+
+      /* add element to root set */
+      if (root === true)
+        this._importStoreRoots.add(element)
+
+      return this
+    }
+    /* get array with root elements */
+  , roots: function(iterator) {
+      if (typeof iterator == 'function') {
+        this._importStoreRoots.each(iterator)
+
+        return this
+      } else {
+        return this._importStoreRoots.valueOf()
+      }
+    }
+    /* get an element by id */
+  , get: function(key) {
+      return this._importStore[key]
+    }
+    /* remove all imported elements */
+  , remove: function() {
+      return this.roots(function() {
+        this.remove()
+      })
+    }
+
+  })
+
+}).call(this);
