@@ -53,7 +53,7 @@ var store = draw.svg(rawSvg)
 store.roots() //-> returns an array with root nodes
 ```
 
-The `roots()` method will also serve as an iterator if a function is passed as the first argumant:
+The `roots()` method will also serve as an iterator if a function is passed as the first argument:
 
 ```javascript
 var store = draw.svg(rawSvg)
