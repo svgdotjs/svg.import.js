@@ -1,4 +1,4 @@
-// svg.import.js 1.0.0 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
+// svg.import.js 1.0.1 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
   // Convert nodes to svg.js elements
@@ -130,7 +130,7 @@
   
         /* call block if given */
         if (typeof block == 'function')
-          block.call(element)
+          block.call(element, level)
       }
     }
     

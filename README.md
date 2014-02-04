@@ -96,11 +96,14 @@ If a block is passed as the second argument it will be applied to every element 
 
 ```javascript
 var id = 1
-draw.svg(rawSvg, function() {
+draw.svg(rawSvg, function(level) {
   this.data('import-id', 'element-' + id)
   id++
 })
 ```
+
+## Dependencies
+This plugin depends on the [svg.parser.js plugin](https://github.com/wout/svg.parser.js).
 
 
 ## Test it yourself
