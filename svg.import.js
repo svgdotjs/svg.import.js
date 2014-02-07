@@ -38,10 +38,27 @@
             for (j = 0; j < child.childNodes.length; j++) {
               grandchild = child.childNodes[j]
   
-              if (grandchild.nodeName.toLowerCase() == 'tspan') {
-                if (element === null)
-                  /* first time through call the text() function on the current context */
-                  element = context[type](grandchild.textContent)
+              // Otherwise exports with white spaces will introduce fake additional lines...
+							/**
+							 * If we had an export with whitespaces or if we parse a well-formed SVG, we have to omit
+							 * #text items found in the raw sting. Otherwise we'll get unwanted new line tspan items in
+							 * the imported SVG graphics.
+							 */
+							if(grandchild.nodeName.toLowerCase() == "#text")
+								continue;
+
+							if (grandchild.nodeName.toLowerCase() == 'tspan') {
+								/**
+								 * Cut off starting and trailing \n -> otherwise we get additional not need new line chars.
+								 * Replace all new lines with space within the tspan, otherwise we'll get unneeded new lines again...
+								 * The replacement of inline \n chars with space will not lead to any problems, since in SVG
+								 * it should not cause a new line according to specifications.
+								 */
+								grandchild.textContent = grandchild.textContent.trim().replace(/\n/g," "," ").match(/[\S]+(\s)*/g).join(' ');
+
+								if (element === null)
+								/* first time through call the text() function on the current context */
+									element = context[type](grandchild.textContent)
   
                 else
                   /* for the remaining times create additional tspans */
@@ -83,6 +100,9 @@
         case 'radialgradient':
           element = context.defs().gradient(type.split('gradient')[0], function(stop) {
             for (var j = 0; j < child.childNodes.length; j++) {
+							// Otherwise white spaced export string cannot be read.
+							if(child.childNodes[j].nodeName.toLowerCase() == "#text")
+								continue;
               stop
                 .at({ offset: 0 })
                 .attr(SVG.parse.attr(child.childNodes[j]))
