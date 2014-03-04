@@ -9,6 +9,7 @@
       child = nodes[i]
       attr  = {}
       clips = []
+      element = null
       
       /* get node type */
       type = child.nodeName.toLowerCase()
