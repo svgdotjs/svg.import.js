@@ -118,14 +118,12 @@
           /* safely ignore these elements */
         break
         case 'marker':
-          // Only parse the marker if the plugin has registered the method. If
-          // the method is not registered, the default console message is 
-          // given.
-          if (context.defs().marker) {
-            element = context.defs().marker(0, 0)
-            convertNodes(child.childNodes, element, level + 1, store, block)
-            break
-          }
+          element = context.defs().marker(
+            child.getAttribute('markerWidth') || 0,
+            child.getAttribute('markerHeight') || 0
+          )
+          convertNodes(child.childNodes, element, level + 1, store, block)
+          break
         default:
           console.log('SVG Import got unexpected type ' + type, child)
         break
