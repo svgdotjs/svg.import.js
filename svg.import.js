@@ -117,6 +117,13 @@
         case 'desc':
           /* safely ignore these elements */
         break
+        case 'marker':
+          element = context.defs().marker(
+            child.getAttribute('markerWidth') || 0,
+            child.getAttribute('markerHeight') || 0
+          )
+          convertNodes(child.childNodes, element, level + 1, store, block)
+          break
         default:
           console.log('SVG Import got unexpected type ' + type, child)
         break
