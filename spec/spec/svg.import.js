@@ -98,6 +98,11 @@ describe('Import', function() {
         expect(poly.transform('y')).toBe(655)
       })
     })
+		
+		it('accepts Inkscape svg nodes with namespaces', function() {
+      var store = draw.svg(rawInkscapeSVG)
+      expect(store.get('layer1') instanceof SVG.G).toBe(true)
+    })
     
   })
   
