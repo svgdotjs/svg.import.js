@@ -175,7 +175,7 @@
       /* properly close svg tags and add them to the DOM */
       well.innerHTML = raw
         .replace(/\n/, '')
-        .replace(/<(\w+)([^<]+?)\/>/g, '<$1$2></$1>')
+        .replace(/<([^\s]+)([^<]+?)\/>/g, '<$1$2></$1>')
       
       /* convert nodes to svg elements */
       convertNodes(well.childNodes, this, 0, store, block)
