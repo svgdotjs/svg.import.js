@@ -91,7 +91,7 @@
         break
         case 'symbol':
             element = context.symbol()
-            convertNodes(child.childNodes, context.symbol(), level + 1, store, block)
+            convertNodes(child.childNodes, element, level + 1, store, block)
         break
         case 'use':
           element = context.use()
