@@ -4,8 +4,8 @@ This is a plugin for the [svg.js](http://svgjs.com) library to import raw SVG da
 
 Svg.import.js is licensed under the terms of the MIT License.
 
-## Warning
-Form version 1.0.0 this plugin depends on [svg.parser.js plugin](https://github.com/wout/svg.parser.js).
+# Warning
+As of version 2 of SVG.js, this functionality is included in the main library. Therefore this plugin is obsolete if you are using version 2 and up.
 
 
 ## Usage
