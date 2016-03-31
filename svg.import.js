@@ -200,7 +200,8 @@
         if (this._importStore[key]) {
           var oldKey = key
           key += Math.round(Math.random() * 1e16)
-          console.warn('Encountered duplicate id "' + oldKey + '". Changed store key to "' + key + '".')
+	  if(console && console.log)
+            console.warn('Encountered duplicate id "' + oldKey + '". Changed store key to "' + key + '".')
         }
 
         this._importStore[key] = element
