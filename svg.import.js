@@ -89,6 +89,10 @@
         case 'defs':
           convertNodes(child.childNodes, context.defs(), level + 1, store, block)
         break
+        case 'symbol':
+            element = context.symbol()
+            convertNodes(child.childNodes, element, level + 1, store, block)
+        break
         case 'use':
           element = context.use()
         break
@@ -126,6 +130,7 @@
           break
         default:
           console.log('SVG Import got unexpected type ' + type, child)
+          convertNodes(child.childNodes, context.nested(), level + 1, store, block)
         break
       }
       
